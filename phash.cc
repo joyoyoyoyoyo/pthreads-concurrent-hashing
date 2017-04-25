@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include "hashchain.h"
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t condition = PTHREAD_COND_INITIALIZER;
 
 LinkedHashEntry::LinkedHashEntry(int key, int value) {
   this->key = key;
