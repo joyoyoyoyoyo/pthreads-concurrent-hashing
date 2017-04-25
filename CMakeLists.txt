@@ -7,6 +7,6 @@ set(SOURCE_FILES
         hashchain.cc
         hashchain.h
         ptest.cc
-        rwlock.h)
+        rwlock.h phash.cc)
 
 add_executable(pthreads_concurrent_hashing ${SOURCE_FILES})
