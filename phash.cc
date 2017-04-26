@@ -3,8 +3,7 @@
 
 
 #include <iostream>
-#include "hashchain.h"
-#include "rwlock.h"
+#include "phash.h"
 
 pthread_mutex_t coarse_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t coarse_condition = PTHREAD_COND_INITIALIZER;
@@ -121,6 +120,7 @@ HashMap::remove(int key) {
 }
 
 HashMap::~HashMap() {
+  pthread_mutex_lock(&coarse_mutex);
   for (int i = 0; i < TABLE_SIZE; i++)
     if (table[i] != NULL) {
       LinkedHashEntry *prevEntry = NULL;
@@ -132,6 +132,8 @@ HashMap::~HashMap() {
       }
     }
   delete[] table;
+  pthread_mutex_unlock(&coarse_mutex);
+
 }
 
 
