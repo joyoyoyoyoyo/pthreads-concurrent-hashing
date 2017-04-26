@@ -4,8 +4,8 @@
 
 #include <iostream>
 #include "hashchain.h"
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t condition = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t coarse_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t coarse_condition = PTHREAD_COND_INITIALIZER;
 
 LinkedHashEntry::LinkedHashEntry(int key, int value) {
   this->key = key;
@@ -50,25 +50,35 @@ HashMap::HashMap() {
 
 int
 HashMap::get(int key) {
+  pthread_mutex_lock(&coarse_mutex);
   int hash = (key % TABLE_SIZE);
-  if (table[hash] == NULL)
+  if (table[hash] == NULL) {
+    pthread_mutex_unlock(&coarse_mutex);
     return -1;
+  }
   else {
     LinkedHashEntry *entry = table[hash];
     while (entry != NULL && entry->getKey() != key)
       entry = entry->getNext();
-    if (entry == NULL)
+    if (entry == NULL) {
+      pthread_mutex_unlock(&coarse_mutex);
       return -1;
-    else
+    }
+    else {
+      pthread_mutex_unlock(&coarse_mutex);
       return entry->getValue();
+    }
   }
 }
 
 void
 HashMap::put(int key, int value) {
+  pthread_mutex_lock(&coarse_mutex);
   int hash = (key % TABLE_SIZE);
-  if (table[hash] == NULL)
+  if (table[hash] == NULL) {
     table[hash] = new LinkedHashEntry(key, value);
+    pthread_mutex_unlock(&coarse_mutex);
+  }
   else {
     LinkedHashEntry *entry = table[hash];
     while (entry->getNext() != NULL)
@@ -77,12 +87,14 @@ HashMap::put(int key, int value) {
       entry->setValue(value);
     else
       entry->setNext(new LinkedHashEntry(key, value));
+    pthread_mutex_unlock(&coarse_mutex);
   }
 }
 
 
 void
 HashMap::remove(int key) {
+  pthread_mutex_lock(&coarse_mutex);
   int hash = (key % TABLE_SIZE);
   if (table[hash] != NULL) {
     LinkedHashEntry *prevEntry = NULL;
@@ -103,6 +115,7 @@ HashMap::remove(int key) {
       }
     }
   }
+  pthread_mutex_unlock(&coarse_mutex);
 }
 
 HashMap::~HashMap() {
