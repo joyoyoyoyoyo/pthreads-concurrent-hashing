@@ -1,12 +1,8 @@
 // Course grain locking based concurrent hash table.
 // Created by Angel Ortega on 4/24/17.
 
-
 #include <iostream>
 #include "phash.h"
-
-pthread_mutex_t coarse_mutex = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t coarse_condition = PTHREAD_COND_INITIALIZER;
 
 LinkedHashEntry::LinkedHashEntry(int key, int value) {
   this->key = key;

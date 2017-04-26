@@ -1,6 +1,7 @@
 // Course grain locking based concurrent hash table.
 // Created by Angel Ortega on 4/25/17.
 //
+#include <pthread.h>
 
 #ifndef PTHREADS_CONCURRENT_HASHING_PHASH_H
 #define PTHREADS_CONCURRENT_HASHING_PHASH_H
@@ -23,6 +24,7 @@ public:
 class HashMap {
 private:
   LinkedHashEntry **table;
+  pthread_mutex_t coarse_mutex = PTHREAD_MUTEX_INITIALIZER;
 public:
   HashMap();
   int get(int key);

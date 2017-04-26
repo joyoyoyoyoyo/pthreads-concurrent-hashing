@@ -6,8 +6,8 @@ class RWLock{
 private:
 #ifdef RWLOCK
 	pthread_rwlock_t rwlock ;
-#else 
-	pthread_mutex_t lock=PTHREAD_MUTEX_INITIALIZER; 
+#else
+//	pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 #endif
  
 public:
