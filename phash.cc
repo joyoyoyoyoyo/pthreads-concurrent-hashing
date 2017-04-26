@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include "hashchain.h"
+#include "rwlock.h"
+
 pthread_mutex_t coarse_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t coarse_condition = PTHREAD_COND_INITIALIZER;
 
