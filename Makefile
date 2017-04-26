@@ -15,7 +15,7 @@ all:  phashchain phashcoarse phashcoarserw  phashfine phashfinerw
 phashchain: hashchain.o ptest.cc
 	$(CC) -o $@ $^ $(FLAGS0)
 
-phashcoarse: phash.cc rwlock.cc ptest.cc
+phashcoarse: phash.cc rwlock.cc ptest-1a.cc
 	$(CC) -o $@ $^ $(FLAGS1)
 
 phashcoarserw: phash.cc rwlock.cc ptest.cc
