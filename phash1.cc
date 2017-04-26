@@ -2,7 +2,7 @@
 // Created by bahamut on 4/25/17.
 //
 
-#include "phash1.h"
+#include "phash.h"
 #include <iostream>
 
 LinkedHashEntry::LinkedHashEntry(int key, int value) {
