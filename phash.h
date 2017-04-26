@@ -1,10 +1,9 @@
 // Course grain locking based concurrent hash table.
 // Created by Angel Ortega on 4/25/17.
 //
-#include <pthread.h>
-
 #ifndef PTHREADS_CONCURRENT_HASHING_PHASH_H
 #define PTHREADS_CONCURRENT_HASHING_PHASH_H
+#include <pthread.h>
 class LinkedHashEntry {
 private:
   int key;
