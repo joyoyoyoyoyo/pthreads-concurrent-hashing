@@ -1,5 +1,5 @@
-//
-// Created by bahamut on 4/25/17.
+// Fine grain locking based concurrent hash table.
+// Created by Angel Ortega on 4/25/17.
 //
 
 #include "phash.h"
