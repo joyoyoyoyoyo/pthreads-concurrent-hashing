@@ -128,7 +128,11 @@ HashMap::~HashMap() {
       }
     }
   delete[] table;
+
+  // clean up our resources
   pthread_mutex_unlock(&coarse_mutex);
+  pthread_mutex_destroy(&coarse_mutex);
+  pthread_exit(NULL);
 
 }
 
