@@ -44,15 +44,6 @@ void RWLock::startRead() {
 
 // Exit Critical Section
 void RWLock::doneRead(){
-  if (read_conter == 0 && write_counter == 0) {
-    // Reading is OK, Writing is OK
-  }
-  if (read_counter > 0) {
-    // Reading is OK
-  }
-  if (writer.count == 1) {
-    // Reading is NO, Writing is NO
-  }
 
 }
 
@@ -96,3 +87,14 @@ void testWriterZeroOrMoreAccess();
 **/
 
 // we will simplify based of how many
+
+
+//  if (read_conter == 0 && write_counter == 0) {
+//    // Reading is OK, Writing is OK
+//  }
+//  if (read_counter > 0) {
+//    // Reading is OK
+//  }
+//  if (writer.count == 1) {
+//    // Reading is NO, Writing is NO
+//  }
