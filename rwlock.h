@@ -2,6 +2,9 @@
 #include<pthread.h>
 #include<semaphore.h>
 
+#ifndef __RWLOCK_H__
+#define __RWLOCK_H__
+
 class RWLock {
 private:
 #ifdef RWLOCK
@@ -34,3 +37,4 @@ public:
   void doneWrite();
 };
 
+#endif

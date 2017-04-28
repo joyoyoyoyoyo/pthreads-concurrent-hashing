@@ -4,6 +4,8 @@
 #ifndef PTHREADS_CONCURRENT_HASHING_PHASH_H
 #define PTHREADS_CONCURRENT_HASHING_PHASH_H
 #include <pthread.h>
+#include "rwlock.h"
+
 class LinkedHashEntry {
 private:
   int key;
@@ -23,7 +25,11 @@ public:
 class HashMap {
 private:
   LinkedHashEntry **table;
+#ifdef RWLOCK
+  RWLock *lock;
+#else
   pthread_mutex_t coarse_mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
 public:
   HashMap();
   int get(int key);
