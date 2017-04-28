@@ -1,0 +1,255 @@
+Angel Ortega
+angelortega@umail.ucsb.edu
+CS170
+
+
+----------------------------------
+Usage eg ./<target> <number of threads> <number of keys> <testnumber> <num iterations>
+
+1.
+--------------------Report wall clock times---------------------------
+./phashcoarse 200 100 1 5
+At 200 threads, with 100 keys, , with 5 iterations
+
+
+======Testing all========
+Wall Time = 0.0246391s
+CPU Time  = 0.108004s
+Throughput= 16559/s
+
+======Testing get========
+Wall Time = 0.011451s
+CPU Time  = 0.018548s
+Throughput= 35630.1/s
+
+======Testing put========
+Wall Time = 0.060024s
+CPU Time  = 0.384113s
+Throughput= 6797.28/s
+
+======Testing delete then put========
+Wall Time = 0.095576s
+CPU Time  = 0.606812s
+Throughput= 4268.85/s
+
+======Testing put then delete========
+Wall Time = 0.231721s
+CPU Time  = 1.69797s
+Throughput= 1760.74/s
+
+
+./phashcoarserw 200 100 1 5
+
+
+======Testing all========
+Wall Time = 0.064898s
+CPU Time  = 0.265376s
+Throughput= 6286.79/s
+
+======Testing get========
+Wall Time = 0.0523391s
+CPU Time  = 0.372667s
+Throughput= 7795.32/s
+
+======Testing put========
+Wall Time = 1.3902s
+CPU Time  = 3.76104s
+Throughput= 293.484/s
+
+======Testing delete then put========
+Wall Time = 1.43077s
+CPU Time  = 3.86085s
+Throughput= 285.162/s
+
+======Testing put then delete========
+Wall Time = 2.88346s
+CPU Time  = 7.87275s
+Throughput= 141.497/s
+
+
+
+./phashfine 200 100 1 5
+
+======Testing all========
+Wall Time = 0.0151501s
+CPU Time  = 0.020851s
+Throughput= 26930.6/s
+
+======Testing get========
+Wall Time = 0.00915694s
+CPU Time  = 0.014008s
+Throughput= 44556.4/s
+
+======Testing put========
+Wall Time = 0.0120468s
+CPU Time  = 0.02754s
+Throughput= 33867.9/s
+
+======Testing delete then put========
+Wall Time = 0.0333169s
+CPU Time  = 0.134423s
+Throughput= 12246.1/s
+
+======Testing put then delete========
+Wall Time = 0.0251219s
+CPU Time  = 0.06874s
+Throughput= 16240.8/s
+
+
+ ./phashfinerw 200 100 1 5
+
+
+======Testing all========
+Wall Time = 0.0164731s
+CPU Time  = 0.029702s
+Throughput= 24767.7/s
+
+======Testing get========
+Wall Time = 0.00996494s
+CPU Time  = 0.022935s
+Throughput= 40943.5/s
+
+======Testing put========
+Wall Time = 0.030854s
+CPU Time  = 0.137243s
+Throughput= 13223.6/s
+
+======Testing delete then put========
+Wall Time = 0.064249s
+CPU Time  = 0.306554s
+Throughput= 6350.29/s
+
+======Testing put then delete========
+Wall Time = 0.031867s
+CPU Time  = 0.074329s
+Throughput= 12803.2/s
+
+
+2.
+**********************With get usleep(1) delay**********************************
+
+/phashcoarse 200 100 1 5
+Coarse-Mutex only is faster than coarse-read-write
+
+======Testing all======== 
+Wall Time = 0.144058s (Faster than Read-Write on an integration test)
+CPU Time  = 0.506302s
+Throughput= 2832.19/s
+
+======Testing get========
+Wall Time = 0.0858581s (Faster than Read-Write on gets)
+CPU Time  = 0.249181s
+Throughput= 4752.03/s
+
+======Testing put========
+Wall Time = 0.0443261s (Faster than Read-Write on puts)
+CPU Time  = 0.305286s
+Throughput= 9204.52/s
+
+======Testing delete then put========
+Wall Time = 0.120342s (Faster than Read-Write on deletes then puts)
+CPU Time  = 0.794165s 
+Throughput= 3390.34/s
+
+======Testing put then delete========
+Wall Time = 0.249342s (Faster than Read-Write on puts then deletes)
+CPU Time  = 1.81255s
+Throughput= 1636.31/s
+
+---------------------------------
+ ./phashcoarserw 200 100 1 5
+
+======Testing all========
+Wall Time = 0.170819s
+CPU Time  = 0.601259s
+Throughput= 2388.49/s
+
+======Testing get========
+Wall Time = 0.183137s
+CPU Time  = 1.067s
+Throughput= 2227.84/s
+
+======Testing put========
+Wall Time = 1.42493s
+CPU Time  = 3.87752s
+Throughput= 286.331/s
+
+
+======Testing delete then put========
+Wall Time = 1.39252s
+CPU Time  = 3.73864s
+Throughput= 292.995/s
+
+
+======Testing put then delete========
+Wall Time = 3.00652s
+CPU Time  = 8.14365s
+Throughput= 135.705/s
+
+-------------------------------------------
+./phashfine 200 100 1 5
+
+======Testing all========
+Wall Time = 0.126262s (Slower than Read-Write on an integration test)
+CPU Time  = 0.375787s
+Throughput= 3231.38/s
+
+======Testing get========
+Wall Time = 0.0831499s (Faster than Read-Write on gets test)
+CPU Time  = 0.251112s
+Throughput= 4906.8/s
+
+======Testing put========
+Wall Time = 0.0300279s (Faster than Read-Write on puts test)
+CPU Time  = 0.080157s
+Throughput= 13587.4/s
+
+
+======Testing delete then put========
+Wall Time = 0.0236878s (Faster than Read-Write on deletes then puts test)
+CPU Time  = 0.079018s
+Throughput= 17224/s
+
+======Testing put then delete========
+Wall Time = 0.083009s (Faster than Read-Write on puts then deletes test)
+CPU Time  = 0.438256s
+Throughput= 4915.13/s
+
+-----------------------------------------------
+./phashfinerw 200 100 1 5
+
+======Testing all========
+Wall Time = 0.099328s
+CPU Time  = 0.227716s
+Throughput= 4107.6/s
+
+======Testing get========
+Wall Time = 0.143504s
+CPU Time  = 0.650801s
+Throughput= 2843.13/s
+
+======Testing put========
+Wall Time = 0.0688291s
+CPU Time  = 0.309156s
+Throughput= 5927.73/s
+
+======Testing delete then put========
+Wall Time = 0.0376539s
+CPU Time  = 0.17356s
+Throughput= 10835.5/s
+
+
+======Testing put then delete========
+Wall Time = 0.102351s
+CPU Time  = 0.58613s
+Throughput= 3986.28/s
+
+An explanation to read-write performing slower is that the operations of condition checking for the read_write is adding extra time delays, the number of counters provides more operations to perform. It could be that my memory management for locking resources is also causing delays. The number of threads to signal and broadcast to could also be creating extra boilerplate.
+
+
+
+
+
+3.
+---------------------------------------------- Average overhead --------------------------------------
+Average Overhead Time for spawning = 4.76837e-07s
