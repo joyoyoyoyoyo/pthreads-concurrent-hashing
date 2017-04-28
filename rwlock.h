@@ -5,14 +5,13 @@
 class RWLock {
 private:
 #ifdef RWLOCK
-  pthread_cond_t reading, writing = PTHREAD_COND_INITIALIZER;
   pthread_mutex_t rwlock;
 #else
   pthread_mutex_t counter = PTHREAD_MUTEX_INITIALIZER;
   pthread_cond_t reading = PTHREAD_COND_INITIALIZER;  // 0 or more
   pthread_cond_t writing = PTHREAD_COND_INITIALIZER;  // 0 or 1
-  int bucket_counter = 0;
-  int num_readers = 0;
+  int bucket_counter;
+  int num_readers;
 #endif
 //  // Express state of shared resources
 //  free: resource_counter = 0;
