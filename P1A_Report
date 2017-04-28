@@ -244,7 +244,7 @@ Wall Time = 0.102351s
 CPU Time  = 0.58613s
 Throughput= 3986.28/s
 
-An explanation to read-write performing slower is that the operations of condition checking for the read_write is adding extra time delays, the number of counters provides more operations to perform. It could be that my memory management for locking resources is also causing delays. The number of threads to signal and broadcast to could also be creating extra boilerplate.
+An explanation to read-write performing slower is that the operations of condition checking for the read_write is adding extra time delays, the number of counters provides more operations to perform. It could be that my memory management for locking resources is also causing delays. The number of threads to signal and broadcast to could also be creating extra boilerplate. It could be that our hashmap has many collisions as well, which would call for more fine tuning in our buckets to the linked list.
 
 
 
