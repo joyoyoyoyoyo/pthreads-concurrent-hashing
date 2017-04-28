@@ -25,13 +25,19 @@ public:
 class HashMap {
 private:
   LinkedHashEntry **table;
-//#ifdef RWLOCK
-  RWLock *lock;
-//#elif FINEGRAIN
-  pthread_mutex_t* fine_mutexes;
-//#else
-  pthread_mutex_t coarse_mutex = PTHREAD_MUTEX_INITIALIZER;
-//#endif
+#ifdef RWLOCK
+  #ifdef FINEGRAIN
+    RWLock **locks;
+  #else
+    RWLock *lock;
+  #endif
+#else
+  #ifdef FINEGRAIN
+    pthread_mutex_t* fine_mutexes;
+  #else
+    pthread_mutex_t coarse_mutex = PTHREAD_MUTEX_INITIALIZER;
+  #endif
+#endif
 public:
   HashMap();
   int get(int key);

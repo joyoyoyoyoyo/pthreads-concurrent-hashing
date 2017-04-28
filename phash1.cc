@@ -46,18 +46,20 @@ const int TABLE_SIZE = 128;
 
 // Coarse Read-Write Lock
 HashMap::HashMap() {
-  lock = new RWLock();
   table = new LinkedHashEntry *[TABLE_SIZE];
-  for (int i = 0; i < TABLE_SIZE; i++)
+  locks = new RWLock*[TABLE_SIZE];
+  for (int i = 0; i < TABLE_SIZE; i++) {
     table[i] = NULL;
+    locks[i] = new RWLock();
+  }
 }
 
 int
 HashMap::get(int key) {
-  lock->startRead();
   int hash = (key % TABLE_SIZE);
+  locks[hash]->startRead();
   if (table[hash] == NULL) {
-    lock->doneRead();
+    locks[hash]->doneRead();
     return -1;
   }
   else {
@@ -65,11 +67,11 @@ HashMap::get(int key) {
     while (entry != NULL && entry->getKey() != key)
       entry = entry->getNext();
     if (entry == NULL) {
-      lock->doneRead();
+      locks[hash]->doneRead();
       return -1;
     }
     else {
-      lock->doneRead();
+      locks[hash]->doneRead();
       return entry->getValue();
     }
   }
@@ -77,11 +79,11 @@ HashMap::get(int key) {
 
 void
 HashMap::put(int key, int value) {
-  lock->startWrite();
   int hash = (key % TABLE_SIZE);
+  locks[hash]->startWrite();
   if (table[hash] == NULL) {
     table[hash] = new LinkedHashEntry(key, value);
-    lock->doneWrite();
+    locks[hash]->doneWrite();
   }
   else {
     LinkedHashEntry *entry = table[hash];
@@ -91,15 +93,15 @@ HashMap::put(int key, int value) {
       entry->setValue(value);
     else
       entry->setNext(new LinkedHashEntry(key, value));
-    lock->doneWrite();
+    locks[hash]->doneWrite();
   }
 }
 
 
 void
 HashMap::remove(int key) {
-  lock->startWrite();
   int hash = (key % TABLE_SIZE);
+  locks[hash]->startWrite();
   if (table[hash] != NULL) {
     LinkedHashEntry *prevEntry = NULL;
     LinkedHashEntry *entry = table[hash];
@@ -119,12 +121,12 @@ HashMap::remove(int key) {
       }
     }
   }
-  lock->doneWrite();
+  locks[hash]->doneWrite();
 }
 
 HashMap::~HashMap() {
-//  lock->startWrite();
-  for (int i = 0; i < TABLE_SIZE; i++)
+  for (int i = 0; i < TABLE_SIZE; i++) {
+    locks[i]->startWrite();
     if (table[i] != NULL) {
       LinkedHashEntry *prevEntry = NULL;
       LinkedHashEntry *entry = table[i];
@@ -134,11 +136,11 @@ HashMap::~HashMap() {
         delete prevEntry;
       }
     }
+    locks[i]->doneWrite();
+    delete locks[i];
+  }
   delete[] table;
-
-  // clean up our resources
-//  lock->doneWrite();
-//  delete lock;
+  delete[] locks;
 }
 
 #else
