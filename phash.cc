@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "phash.h"
-
+#include <sys/unistd.h>
 
 LinkedHashEntry::LinkedHashEntry(int key, int value) {
   this->key = key;
@@ -54,6 +54,7 @@ HashMap::HashMap() {
 
 int
 HashMap::get(int key) {
+//  usleep(1);
   lock->startRead();
   int hash = (key % TABLE_SIZE);
   if (table[hash] == NULL) {
@@ -151,6 +152,7 @@ HashMap::HashMap() {
 
 int
 HashMap::get(int key) {
+//  usleep(1);
   pthread_mutex_lock(&coarse_mutex);
   int hash = (key % TABLE_SIZE);
   if (table[hash] == NULL) {
