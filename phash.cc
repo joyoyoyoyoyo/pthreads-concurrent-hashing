@@ -85,7 +85,7 @@ HashMap::put(int key, int value) {
   }
   else {
     LinkedHashEntry *entry = table[hash];
-    while (entry->getNext() != NULL)
+    while (entry->getNext() != NULL && entry->getKey() != key)
       entry = entry->getNext();
     if (entry->getKey() == key)
       entry->setValue(value);
@@ -182,7 +182,7 @@ HashMap::put(int key, int value) {
   }
   else {
     LinkedHashEntry *entry = table[hash];
-    while (entry->getNext() != NULL)
+    while (entry->getNext() != NULL && entry->getKey() != key)
       entry = entry->getNext();
     if (entry->getKey() == key)
       entry->setValue(value);
