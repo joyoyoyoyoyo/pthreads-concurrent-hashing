@@ -4,6 +4,7 @@
 
 #include "rwlock.h"
 
+#ifdef RWLOCK
 
 RWLock::RWLock(): bucket_counter(0), num_readers(0) {
 
@@ -86,3 +87,7 @@ void testWriterZeroOrMoreAccess();
 //  if (writer.count == 1) {
 //    // Reading is NO, Writing is NO
 //  }
+
+#else
+
+#endif
