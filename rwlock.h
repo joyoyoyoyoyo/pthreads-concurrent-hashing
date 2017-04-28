@@ -11,7 +11,8 @@ private:
   pthread_mutex_t counter = PTHREAD_MUTEX_INITIALIZER;
   pthread_cond_t reading = PTHREAD_COND_INITIALIZER;  // 0 or more
   pthread_cond_t writing = PTHREAD_COND_INITIALIZER;  // 0 or 1
-  int resource_counter;
+  int bucket_counter = 0;
+  int num_readers = 0;
 #endif
 //  // Express state of shared resources
 //  free: resource_counter = 0;
