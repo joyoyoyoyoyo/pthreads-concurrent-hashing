@@ -123,7 +123,7 @@ HashMap::remove(int key) {
 }
 
 HashMap::~HashMap() {
-//  lock->startWrite();
+  lock->startWrite();
   for (int i = 0; i < TABLE_SIZE; i++)
     if (table[i] != NULL) {
       LinkedHashEntry *prevEntry = NULL;
@@ -137,8 +137,8 @@ HashMap::~HashMap() {
   delete[] table;
 
   // clean up our resources
-//  lock->doneWrite();
-//  delete lock;
+  lock->doneWrite();
+  delete lock;
 }
 
 #else
