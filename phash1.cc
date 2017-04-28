@@ -41,7 +41,7 @@ LinkedHashEntry::setNext(LinkedHashEntry *next) {
 const int TABLE_SIZE = 128;
 
 
-
+// assumes FINEGRAIN flag is on
 #ifdef RWLOCK
 
 // Coarse Read-Write Lock
@@ -142,19 +142,22 @@ HashMap::~HashMap() {
 }
 
 #else
-// Coarse without Read-Write lock
+// Fine without Read-Write lock
 HashMap::HashMap() {
   table = new LinkedHashEntry *[TABLE_SIZE];
-  for (int i = 0; i < TABLE_SIZE; i++)
+  fine_mutexes = new pthread_mutex_t[TABLE_SIZE];
+  for (int i = 0; i < TABLE_SIZE; i++) {
     table[i] = NULL;
+    pthread_mutex_init(&fine_mutexes[i], NULL);
+  }
 }
 
 int
 HashMap::get(int key) {
-  pthread_mutex_lock(&coarse_mutex);
   int hash = (key % TABLE_SIZE);
+  pthread_mutex_lock(&fine_mutexes[hash]);
   if (table[hash] == NULL) {
-    pthread_mutex_unlock(&coarse_mutex);
+    pthread_mutex_unlock(&fine_mutexes[hash]);
     return -1;
   }
   else {
@@ -162,11 +165,11 @@ HashMap::get(int key) {
     while (entry != NULL && entry->getKey() != key)
       entry = entry->getNext();
     if (entry == NULL) {
-      pthread_mutex_unlock(&coarse_mutex);
+      pthread_mutex_unlock(&fine_mutexes[hash]);
       return -1;
     }
     else {
-      pthread_mutex_unlock(&coarse_mutex);
+      pthread_mutex_unlock(&fine_mutexes[hash]);
       return entry->getValue();
     }
   }
@@ -174,11 +177,11 @@ HashMap::get(int key) {
 
 void
 HashMap::put(int key, int value) {
-  pthread_mutex_lock(&coarse_mutex);
   int hash = (key % TABLE_SIZE);
+  pthread_mutex_lock(&fine_mutexes[hash]);
   if (table[hash] == NULL) {
     table[hash] = new LinkedHashEntry(key, value);
-    pthread_mutex_unlock(&coarse_mutex);
+    pthread_mutex_unlock(&fine_mutexes[hash]);
   }
   else {
     LinkedHashEntry *entry = table[hash];
@@ -188,15 +191,15 @@ HashMap::put(int key, int value) {
       entry->setValue(value);
     else
       entry->setNext(new LinkedHashEntry(key, value));
-    pthread_mutex_unlock(&coarse_mutex);
+    pthread_mutex_unlock(&fine_mutexes[hash]);
   }
 }
 
 
 void
 HashMap::remove(int key) {
-  pthread_mutex_lock(&coarse_mutex);
   int hash = (key % TABLE_SIZE);
+  pthread_mutex_lock(&fine_mutexes[hash]);
   if (table[hash] != NULL) {
     LinkedHashEntry *prevEntry = NULL;
     LinkedHashEntry *entry = table[hash];
@@ -216,12 +219,12 @@ HashMap::remove(int key) {
       }
     }
   }
-  pthread_mutex_unlock(&coarse_mutex);
+  pthread_mutex_unlock(&fine_mutexes[hash]);
 }
 
 HashMap::~HashMap() {
-  pthread_mutex_lock(&coarse_mutex);
-  for (int i = 0; i < TABLE_SIZE; i++)
+  for (int i = 0; i < TABLE_SIZE; i++) {
+    pthread_mutex_lock(&fine_mutexes[i]);
     if (table[i] != NULL) {
       LinkedHashEntry *prevEntry = NULL;
       LinkedHashEntry *entry = table[i];
@@ -231,11 +234,13 @@ HashMap::~HashMap() {
         delete prevEntry;
       }
     }
+    // clean up our resources iteratively
+    pthread_mutex_unlock(&fine_mutexes[i]);
+    pthread_mutex_destroy(&fine_mutexes[i]);
+  }
   delete[] table;
 
   // clean up our resources
-  pthread_mutex_unlock(&coarse_mutex);
-  pthread_mutex_destroy(&coarse_mutex);
   pthread_exit(NULL);
 }
 #endif

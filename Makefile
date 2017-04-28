@@ -21,10 +21,10 @@ phashcoarse: phash.cc rwlock.cc ptest-1a.cc
 phashcoarserw: phash.cc rwlock.cc ptest-1a.cc
 	$(CC) -o $@ $^ $(FLAGS2)
 
-phashfine: phash1.cc rwlock.cc ptest.cc
+phashfine: phash1.cc rwlock.cc ptest-1a.cc
 	$(CC) -o $@ $^ $(FLAGS3)
 
-phashfinerw: phash1.cc rwlock.cc ptest.cc
+phashfinerw: phash1.cc rwlock.cc ptest-1a.cc
 	$(CC) -o $@ $^ $(FLAGS4)
 
 run: 
